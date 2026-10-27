@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Total Immersion Freestyle — A Visual Study Guide</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1730"/><stop offset="1" stop-color="#1b3a63"/></linearGradient>
+    <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="0.5" stop-color="#075985"/><stop offset="1" stop-color="#082f49"/></linearGradient>
+    <linearGradient id="gTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="0.5" stop-color="#0891b2"/><stop offset="1" stop-color="#0e7490"/></linearGradient>
+  </defs>
+</svg>
+
+<header class="hero">
+  <nav class="topnav">
+    <a href="#lab">Stroke Lab</a><a href="#principles">Principles</a><a href="#anatomy">Stroke Anatomy</a><a href="#frames">Frame by Frame</a><a href="#mistakes">Mistakes</a><a href="#drills">Drills</a><a href="#practice">Practice</a><a href="#glossary">Glossary</a>
+  </nav>
+  <div class="hero-inner">
+    <p class="kicker">A visual study guide</p>
+    <h1>Total Immersion Freestyle</h1>
+    <p class="lede">Total Immersion (TI) is a way of teaching freestyle developed by coach Terry Laughlin from 1989 onward. It treats swimming as a skill, not just fitness: <b>reduce drag first</b>, then add propulsion that comes from the <b>whole body</b> rather than from the arms. You swim long, balanced, quiet and relaxed, “like a fish, not a human”.</p>
+    <div class="pillars">
+      <div class="pillar"><span>1</span><h3>Balance</h3><p>Stay horizontal without kicking hard. Release the head, lean on the chest, and the hips rise.</p></div>
+      <div class="pillar"><span>2</span><h3>Streamline</h3><p>Make the body a long, narrow vessel. Swim on your sides, extend the lead arm, and keep everything inside your shadow.</p></div>
+      <div class="pillar"><span>3</span><h3>Propulsion</h3><p>Hold your place in the water and let body rotation, timed with the spear and a 2-beat kick, move you past your hand.</p></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ LAB ============ -->
+<section id="lab" class="section">
+  <div class="sec-head">
+    <h2>The Stroke Lab</h2>
+    <p>One swimmer, three cameras, all in sync. Play it slowly, scrub the timeline, or step through the key positions. The <span class="c-r">right arm is orange</span> and the <span class="c-l">left arm is blue</span>. Keys: <kbd>Space</kbd> play/pause · <kbd>←</kbd><kbd>→</kbd> fine step (hold <kbd>Shift</kbd> for bigger steps) · <kbd>[</kbd><kbd>]</kbd> previous/next key position.</p>
+  </div>
+
+  <div class="lab-grid">
+    <div class="lab-views">
+      <div class="view" id="lab-side"><div class="view-label">Side view (from the swimmer’s left)</div><svg></svg></div>
+      <div class="view-row">
+        <div class="view" id="lab-front"><div class="view-label">Head-on view</div><svg></svg></div>
+        <div class="view" id="lab-top"><div class="view-label">From above</div><svg></svg></div>
+      </div>
+
+      <div class="controls">
+        <div class="ctrl-row">
+          <button class="btn" id="btn-prev" title="Previous key position ([)">⏮ Key</button>
+          <button class="btn" id="btn-back" title="Step back (←)">◀ 1%</button>
+          <button class="btn primary" id="btn-play">❚❚ Pause</button>
+          <button class="btn" id="btn-fwd" title="Step forward (→)">1% ▶</button>
+          <button class="btn" id="btn-next" title="Next key position (])">Key ⏭</button>
+          <input type="range" id="scrub" min="0" max="999" value="250" aria-label="Cycle position">
+          <span id="tpos" class="tpos">25%</span>
+        </div>
+        <svg id="timeline" class="timeline"></svg>
+        <div class="ctrl-row wrap">
+          <label>Speed
+            <select id="speed">
+              <option value="0.08">0.08× (super slow)</option>
+              <option value="0.15">0.15×</option>
+              <option value="0.25" selected>0.25×</option>
+              <option value="0.5">0.5×</option>
+              <option value="1">1× (real time)</option>
+            </select>
+          </label>
+          <label>Breathing
+            <select id="breath">
+              <option value="0">None</option>
+              <option value="2" selected>Every 2 strokes (right)</option>
+              <option value="3">Every 3 strokes (bilateral)</option>
+            </select>
+          </label>
+          <label>Mistake simulator
+            <select id="mistake">
+              <option value="none">— Correct TI form —</option>
+              <option value="headUp">Head lifted</option>
+              <option value="flat">Flat body (no rotation)</option>
+              <option value="over">Over-rotation</option>
+              <option value="cross">Crossover entry</option>
+              <option value="press">Pressing down / no patient hand</option>
+              <option value="bigKick">Big constant kick</option>
+              <option value="liftBreath">Lifting head to breathe</option>
+            </select>
+          </label>
+        </div>
+        <div class="ctrl-row wrap toggles">
+          <label><input type="checkbox" id="opt-labels" checked> Labels</label>
+          <label><input type="checkbox" id="opt-vectors" checked> Force arrows</label>
+          <label><input type="checkbox" id="opt-ghost"> Ghost (correct form)</label>
+          <label><input type="checkbox" id="opt-bubbles" checked> Bubbles</label>
+          <span class="sep"></span>
+          <label><input type="checkbox" id="view-side" checked> Side</label>
+          <label><input type="checkbox" id="view-front" checked> Head-on</label>
+          <label><input type="checkbox" id="view-top" checked> Above</label>
+        </div>
+      </div>
+    </div>
+
+    <aside class="info">
+      <div id="info-arms"></div>
+      <div class="info-body" id="info-body"></div>
+      <div id="info-mistake"></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ PRINCIPLES ============ -->
+<section id="principles" class="section">
+  <div class="sec-head">
+    <h2>Principles: why TI looks the way it does</h2>
+    <p>Water is about 800 times denser than air. At swimming speeds, <b>drag matters much more than power</b>. A small cut in resistance saves more energy than a big increase in effort. Every TI technique comes from three ideas, in this order:</p>
+  </div>
+  <div class="principles">
+    <div class="card span-all">
+      <div class="split">
+      <div>
+      <h3>① Balance before propulsion</h3>
+      <p>Your lungs float and your legs sink. Your body behaves like a <b>seesaw</b> pivoting around the chest. Most adults’ legs drop, so they kick hard just to stay level, which is exhausting and gets them nowhere. TI fixes this with position, not effort:</p>
+      <ul>
+        <li><b>Release the head.</b> Let the water support its weight, and look straight down.</li>
+        <li><b>Lean on your chest</b> (“press your buoy”) to shift weight forward.</li>
+        <li><b>Keep a lead arm extended.</b> It moves weight forward, like adding weight to the other end of the seesaw.</li>
+      </ul>
+      </div>
+      <div class="fig wide" data-fig="balance"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>② Streamline: be a longer, narrower vessel</h3>
+      <p>Long boats are faster than short boats. TI swimmers <b>“swim tall”</b>: the lead arm extends the waterline, and the body rotates so you slip through the water on your side, not plough through it on your chest.</p>
+      <ul>
+        <li><b>Skate position:</b> you are briefly on one side with the lead arm extended between strokes.</li>
+        <li><b>Front-quadrant timing:</b> one hand is always out in front, so the vessel stays long.</li>
+        <li><b>Stay in your shadow:</b> elbows, hands, knees and feet stay inside the outline your body cuts through the water.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>③ Propulsion from the whole body</h3>
+      <p>Instead of pulling water backward with the arm, TI teaches you to <b>“hold your place”</b> with hand and forearm and move your body past that point. The power comes from the <b>rotation of the core</b>, driven by the spearing arm and a light, well-timed kick.</p>
+      <ul>
+        <li><b>Spear + kick + rotate</b> happen together as one movement.</li>
+        <li><b>The arm is a connector</b> between your core and the water, not the engine.</li>
+        <li><b>Quiet, effortless</b> and repeatable. TI measures progress by <b>fewer strokes per length</b> at the same effort.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ANATOMY ============ -->
+<section id="anatomy" class="section">
+  <div class="sec-head">
+    <h2>Anatomy of the stroke</h2>
+    <p>Each part of the swim on its own, with an animated close-up. Pause any figure with its ❚❚ button, or open the moment in the Stroke Lab.</p>
+  </div>
+
+  <article class="part" id="p-head">
+    <div class="part-txt">
+      <span class="part-n">01</span><h3>Head &amp; spine: the weightless head</h3>
+      <p>The head weighs about 4–5 kg on land. TI asks you to <b>let the water hold it</b>. Look straight down at the pool bottom, with the back of the head just at the surface and the crown pointing to the far wall. Imagine a laser from the crown, or a skewer through the spine: <b>the head stays aligned with the spine and does not move independently</b> except to breathe.</p>
+      <ul class="cues"><li>“Hide your head” between your arms</li><li>Crown leads, eyes down</li><li>Feel the hips rise when the head releases</li></ul>
+      <button class="link" data-goto="0.25">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="head-good"></div><div class="fig" data-fig="head-bad"></div></div>
+  </article>
+
+  <article class="part" id="p-rot">
+    <div class="part-txt">
+      <span class="part-n">02</span><h3>Rotation: swim on your sides</h3>
+      <p>The body rotates around the spine from one <b>skate position</b> to the other, about <b>30–45°</b> each way. That’s enough for the recovering shoulder to clear the water, but not a full roll onto the side. <b>Shoulders and hips rotate together</b>, as one unit. The head <b>stays still</b> through the rotation.</p>
+      <ul class="cues"><li>Rotate from the hips, “like a skewer through you”</li><li>Rotation creates the power, the arm transmits it</li><li>Notice from above how the body narrows when rotated</li></ul>
+      <button class="link" data-goto="0.5">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="rotation"></div><div class="fig" data-fig="rotation-top"></div></div>
+  </article>
+
+  <article class="part" id="p-skate">
+    <div class="part-txt">
+      <span class="part-n">03</span><h3>The skate position</h3>
+      <p>This is the home base of TI freestyle, and the position you briefly pass through after every stroke. The <b>lead arm is extended</b> on its railroad track, slightly below the surface. The <b>other arm rests at the thigh</b>. The body is <b>rotated onto the lead-arm side</b>, the face looks down, and the legs are relaxed and together.</p>
+      <ul class="cues"><li>Lead hand relaxed, fingertips slightly down</li><li>Long line from fingertips to toes</li><li>Stable, no wobble, no effort to stay up</li></ul>
+      <button class="link" data-goto="0.25">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="skate-side"></div><div class="fig" data-fig="skate-front"></div></div>
+  </article>
+
+  <article class="part" id="p-rec">
+    <div class="part-txt">
+      <span class="part-n">04</span><h3>Recovery: a relaxed swing</h3>
+      <p>After the hand releases at the hip, the <b>elbow leads</b> the arm forward. The forearm and hand <b>hang relaxed</b>, close to the water. Because the body is rotated, the shoulder is already high, so the arm doesn’t need to swing wide. Recovery is the arm’s rest phase: <b>no tension</b>.</p>
+      <ul class="cues"><li>“Swing a relaxed, dead forearm”</li><li>Fingertips skim close to the water</li><li>Recover on your own side, never across</li></ul>
+      <button class="link" data-goto="0.36">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="recovery-side"></div><div class="fig" data-fig="recovery-front"></div></div>
+  </article>
+
+  <article class="part" id="p-spear">
+    <div class="part-txt">
+      <span class="part-n">05</span><h3>Entry &amp; spear</h3>
+      <p>The hand passes close to the head and enters <b>about a forearm’s length in front of it</b>, fingertips first, as if sliding into a <b>mail slot</b> or a sleeve. Then it <b>spears forward and slightly downward</b> to full extension, on a track in line with its own shoulder (<b>railroad tracks, not a tightrope</b>). The spear is driven by the hip rotating, not by reaching.</p>
+      <ul class="cues"><li>Enter near the head, extend underwater, not in the air</li><li>Spear to a target about 20–30 cm deep</li><li>Hands stay shoulder-width apart; never cross the midline</li></ul>
+      <button class="link" data-goto="0.5">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="spear-side"></div><div class="fig" data-fig="spear-top"></div></div>
+  </article>
+
+  <article class="part" id="p-fq">
+    <div class="part-txt">
+      <span class="part-n">06</span><h3>Timing: the patient lead hand</h3>
+      <p>TI freestyle uses <b>front-quadrant timing</b>. The lead hand waits, extended, until the recovering hand has <b>passed the head</b>. Only then does it begin the catch. For a moment, <b>both hands are in front of the head</b> (watch the green box). This keeps the vessel long and gives the spear something to “switch” with.</p>
+      <ul class="cues"><li>“Patient lead hand”</li><li>Catch as the other hand reaches the mail slot</li><li>Think of it as a smooth switch, not a catch-up pause</li></ul>
+      <button class="link" data-goto="0.46">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs one"><div class="fig" data-fig="fq-side"></div></div>
+  </article>
+
+  <article class="part" id="p-catch">
+    <div class="part-txt">
+      <span class="part-n">07</span><h3>The catch: hold your place</h3>
+      <p>The catch starts the propulsive phase. The fingertips tip down and the <b>elbow stays high, near the surface</b>, while the forearm drops below it. Hand and forearm form <b>one vertical paddle</b> facing backward. Don’t press down on the water. That only lifts you. Instead, <b>anchor</b> the paddle and get ready to move the body past it.</p>
+      <ul class="cues"><li>High elbow, vertical forearm</li><li>Gentle, gradual pressure, not a grab</li><li>Hand stays under its own shoulder</li></ul>
+      <button class="link" data-goto="0.0">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="catch-side"></div><div class="fig" data-fig="catch-front"></div></div>
+  </article>
+
+  <article class="part" id="p-pull">
+    <div class="part-txt">
+      <span class="part-n">08</span><h3>Pull &amp; push: move the body past the hand</h3>
+      <p>With the paddle anchored, the <b>body rotates and slides forward over it</b>. In the water’s frame, the hand barely moves backward. It travels <b>under the body</b>, from under the shoulder to past the waist, and finishes at the <b>thigh</b> as the hip rotates out of the way. Then it releases, elbow first, into the recovery.</p>
+      <ul class="cues"><li>The body passes the hand, not the other way round</li><li>Power from hip rotation, not shoulder muscle</li><li>Finish at the thigh, without flicking water up</li></ul>
+      <button class="link" data-goto="0.1">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="pull-side"></div><div class="fig" data-fig="pull-top"></div></div>
+  </article>
+
+  <article class="part" id="p-kick">
+    <div class="part-txt">
+      <span class="part-n">09</span><h3>The 2-beat kick</h3>
+      <p>TI uses a <b>2-beat kick</b>: one small kick per arm stroke, two per full cycle. Each kick is a <b>compact downward flick from the hip</b>, timed with the <b>opposite hand’s spear</b>. As the right hand spears, the left foot flicks, and the diagonal connection drives the hip rotation. Between kicks, the legs are relaxed, close together, and inside the body’s shadow.</p>
+      <ul class="cues"><li>Right spear ↔ left foot, left spear ↔ right foot</li><li>Small kick: the foot stays inside the body’s shadow</li><li>The kick drives rotation, not forward thrust</li></ul>
+      <button class="link" data-goto="0.02">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs one"><div class="fig" data-fig="kick-side"></div></div>
+  </article>
+
+  <article class="part" id="p-breath">
+    <div class="part-txt">
+      <span class="part-n">10</span><h3>Breathing: roll to air</h3>
+      <p>Breathing is part of the rotation. As the arm on your breathing side pulls and recovers, the <b>head turns with the body</b>, around the spine’s axis, just far enough for the mouth to reach air. <b>One goggle stays in the water.</b> The head moving forward makes a <b>bow wave</b>, and the trough beside your head gives you air lower than the surface level. Return the face down <b>before the hand spears</b>. Between breaths, <b>exhale steadily</b> through the nose.</p>
+      <ul class="cues"><li>Turn, don’t lift: chin follows the shoulder</li><li>Keep the lead hand patient while you breathe</li><li>Learn to breathe on both sides (every 3 strokes, or alternate lengths)</li></ul>
+      <button class="link" data-goto="0.75">Open in Stroke Lab →</button>
+    </div>
+    <div class="part-figs two"><div class="fig" data-fig="breath-front"></div><div class="fig" data-fig="breath-side"></div></div>
+  </article>
+</section>
+
+<!-- ============ FRAMES ============ -->
+<section id="frames" class="section">
+  <div class="sec-head">
+    <h2>Frame by frame: one full cycle</h2>
+    <p>Eight key positions in a complete cycle (two strokes). Study them like flash cards, then switch camera.</p>
+    <div class="seg">
+      <button class="on" data-filmview="side">Side</button><button data-filmview="front">Head-on</button><button data-filmview="top">Above</button>
+    </div>
+  </div>
+  <div id="film" class="film"></div>
+</section>
+
+<!-- ============ MISTAKES ============ -->
+<section id="mistakes" class="section">
+  <div class="sec-head">
+    <h2>Common mistakes vs. TI form</h2>
+    <p>Each card shows the mistake (left) next to correct TI form (right). Use “Simulate in Stroke Lab” to study a mistake with all three cameras and a ghost overlay of correct form.</p>
+  </div>
+  <div id="mistakes-grid" class="mistakes-grid"></div>
+</section>
+
+<!-- ============ DRILLS ============ -->
+<section id="drills" class="section">
+  <div class="sec-head">
+    <h2>Drill progression</h2>
+    <p>TI builds the stroke in layers: balance first, then streamline, then timing and propulsion. Do each drill until it feels easy and stable before moving on. Fins can help at first. Breathe whenever you need to, by rolling to air or simply stopping and standing. <span class="muted">Drill names and order vary slightly between TI books, DVDs and courses, but the goals are the same.</span></p>
+  </div>
+  <ol id="drills-list" class="drills"></ol>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section id="practice" class="section">
+  <div class="sec-head">
+    <h2>How to practice</h2>
+    <p>TI calls it <b>practice</b>, not a workout. The aim is to <b>imprint</b> efficient movement, so every length should be done with attention.</p>
+  </div>
+  <div class="practice-grid">
+    <div class="card">
+      <h3>🎯 One focal point at a time</h3>
+      <p>Choose one thing to feel, like “weightless head” or “patient lead hand”, and swim short repeats (25 m) thinking only about that. Rest enough to stay relaxed. When it feels automatic, add the next focal point.</p>
+    </div>
+    <div class="card">
+      <h3>🔢 Count strokes per length (SPL)</h3>
+      <p>Count every hand entry over one length. Fewer strokes at the same easy effort means a longer, more streamlined vessel. Find your personal range on easy lengths and work on staying in it as you add speed. Taller swimmers naturally take fewer strokes.</p>
+    </div>
+    <div class="card">
+      <h3>⏱ Tempo Trainer</h3>
+      <p>A small beeper under the cap sets your stroke rate. Find the tempo where your SPL feels comfortable, then make it slightly faster in small steps (e.g. 0.02 s per stroke) while keeping your stroke count. Speed = stroke length × stroke rate.</p>
+    </div>
+    <div class="card">
+      <h3>⛳ Swim Golf</h3>
+      <p>Add your stroke count to your time in seconds for one length (e.g. 18 strokes + 25 s = 43). Lower is better. It rewards both efficiency and speed, so you can’t “win” by thrashing or by over-gliding.</p>
+    </div>
+  </div>
+
+  <div class="card checklist-card">
+    <div class="ck-head"><h3>Focal-point checklist</h3><span id="ck-count"></span><button class="btn small" id="ck-reset">Reset</button></div>
+    <p class="muted">Tick a focal point when you can feel it in the water without thinking about it. Your progress is saved in this browser.</p>
+    <div id="checklist" class="checklist"></div>
+  </div>
+</section>
+
+<!-- ============ GLOSSARY ============ -->
+<section id="glossary" class="section">
+  <div class="sec-head"><h2>Glossary</h2></div>
+  <dl class="glossary">
+    <div><dt>Balance</dt><dd>Lying horizontal without kicking to support the legs. You get there by releasing the head and leaning on the chest.</dd></div>
+    <div><dt>Streamline</dt><dd>Shaping the body to make the smallest possible “hole” in the water: long, narrow, everything inside your shadow.</dd></div>
+    <div><dt>Skate position</dt><dd>Rotated about 30–45° to one side, lead arm extended, other arm at the thigh. The pause point between strokes.</dd></div>
+    <div><dt>Patient lead hand</dt><dd>The extended arm waits until the recovering hand passes the head before starting the catch.</dd></div>
+    <div><dt>Front-quadrant swimming</dt><dd>Timing where one hand is always in front of the head, keeping the vessel long.</dd></div>
+    <div><dt>Mail slot</dt><dd>The entry point about a forearm’s length in front of the head where the hand slips into the water.</dd></div>
+    <div><dt>Spear</dt><dd>Extending the entering arm forward and slightly down to its target, driven by hip rotation.</dd></div>
+    <div><dt>Railroad tracks</dt><dd>Hands enter and extend on two parallel lines, shoulder-width apart, never crossing the midline (the “tightrope”).</dd></div>
+    <div><dt>Catch / hold your place</dt><dd>Setting a high-elbow forearm-and-hand paddle that anchors in the water, so the body can move past it.</dd></div>
+    <div><dt>Switch</dt><dd>The moment the lead arm catches and the recovering arm spears, as the body rotates from one skate to the other.</dd></div>
+    <div><dt>2-beat kick</dt><dd>One compact kick per arm stroke, with each foot flicking as the opposite hand spears.</dd></div>
+    <div><dt>Bow wave trough</dt><dd>The dip in the water beside the head, created by the head moving forward. It lets you breathe with your head low.</dd></div>
+    <div><dt>SPL</dt><dd>Strokes per length. TI’s main measure of efficiency.</dd></div>
+    <div><dt>Kaizen</dt><dd>Continuous, small improvement. TI’s attitude toward practice.</dd></div>
+  </dl>
+</section>
+</main>
+
+<footer>
+  <p>Study aid inspired by the Total Immersion method created by Terry Laughlin. The animated swimmer is a simplified model meant to show positions and timing. It is not a precise biomechanical simulation. Learn from a TI coach or official TI materials for in-water feedback.</p>
+</footer>
+
+<script src="js/model.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
