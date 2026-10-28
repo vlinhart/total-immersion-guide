@@ -1,15 +1,10 @@
-// Total Immersion freestyle — kinematic swimmer model.
+// Total Immersion freestyle — kinematic swimmer model + stroke-specific overlays.
 // Body frame: x forward (head direction), y to swimmer's right, z up. Water surface at z = 0.
 // Arm "A" = right arm (+y), arm "B" = left arm (-y). One full cycle T in [0,1) = two strokes.
 'use strict';
 
 const M = (() => {
-  const D2R = Math.PI / 180;
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const smooth = t => { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
-  const frac = t => t - Math.floor(t);
-  const wrapHalf = d => d - Math.round(d); // -> [-0.5, 0.5)
+  const { D2R, clamp, lerp, smooth, frac, wrapHalf, add, scale, rotX, rotPitch, dirAng } = G;
 
   const BODY = {
     sh: 20,            // shoulder half width
@@ -183,20 +178,6 @@ const M = (() => {
     };
   }
 
-  // ---- 3D helpers ----
-  const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
-  const scale = (a, s) => [a[0] * s, a[1] * s, a[2] * s];
-  function rotX(p, deg) { // roll: positive raises +y (right) side
-    const c = Math.cos(deg * D2R), s = Math.sin(deg * D2R);
-    return [p[0], p[1] * c - p[2] * s, p[1] * s + p[2] * c];
-  }
-  function rotPitch(p, deg, px = -20) { // positive = hips down, head up
-    const c = Math.cos(deg * D2R), s = Math.sin(deg * D2R);
-    const x = p[0] - px;
-    return [px + x * c - p[2] * s, p[1], x * s + p[2] * c];
-  }
-  const dirAng = deg => [Math.cos(deg * D2R), 0, -Math.sin(deg * D2R)];
-
   function armPose(keys, t, side, crossover) {
     const k = sampleKeys(keys, t);
     // crossover weighting: strongest during entry and lead phase
@@ -286,5 +267,106 @@ const M = (() => {
   return {
     D2R, clamp, lerp, smooth, frac, wrapHalf, BODY, PHASES, phaseOf, DEFAULTS, MISTAKES,
     swimState, computePose, sampleKeys, ARM_KEYS, kickCurve, rollAt, breathAt,
+  };
+})();
+
+// Stroke definition consumed by the shared renderer (js/engine/render.js).
+const STROKE = (() => {
+  const { D2R } = G;
+
+  function labels(view, c) {
+    const { P, v, pose, st, fs, f1, tag, COL } = c;
+    let s = '';
+    if (view === 'side') {
+      // front quadrant zone
+      const x0 = P([pose.spineTop[0] - 6, 0, 0])[0];
+      const both = pose.armR.H[0] > pose.spineTop[0] - 4 && pose.armL.H[0] > pose.spineTop[0] - 4;
+      s += `<rect x="${f1(x0)}" y="${f1(v.cy + 4)}" width="${f1(v.w - x0)}" height="${f1(v.h - v.cy - 22)}" fill="${both ? 'rgba(52,211,153,0.10)' : 'rgba(255,255,255,0.03)'}" stroke="${both ? '#34d399' : 'rgba(255,255,255,0.18)'}" stroke-dasharray="4 5"/>`;
+      s += `<text x="${f1(v.w - 8)}" y="${f1(v.h - 24)}" font-size="${fs * 0.85}" fill="${both ? '#6ee7b7' : 'rgba(255,255,255,0.45)'}" text-anchor="end">front quadrant${both ? ' — both hands ahead of head' : ''}</text>`;
+      for (const [arm, side, t] of [[pose.armR, 'R', st.tA], [pose.armL, 'L', st.tB]]) {
+        const ph = M.phaseOf(t);
+        const h = P(arm.H);
+        const dy = arm.H[2] > -12 ? -30 : 30;
+        s += tag(h[0], h[1] + dy, `${side === 'R' ? 'Right' : 'Left'}: ${ph.name}`, COL[side].fill, fs);
+      }
+      for (const [leg, side] of [[pose.legR, 'R'], [pose.legL, 'L']]) {
+        if (leg.active) { const f = P(leg.F); s += tag(f[0] + 12, f[1] + 26, `${side === 'R' ? 'right' : 'left'} foot flick`, '#f8fafc', fs * 0.9); }
+      }
+    }
+    if (view === 'front') {
+      const a = P(pose.armR.S), b = P(pose.armL.S);
+      const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+      s += `<line x1="${f1(mx - 70)}" y1="${f1(my)}" x2="${f1(mx + 70)}" y2="${f1(my)}" stroke="#fff" stroke-opacity="0.35" stroke-dasharray="4 4"/>`;
+      s += `<line x1="${f1(a[0] - (b[0] - a[0]) * 0.5)}" y1="${f1(a[1] - (b[1] - a[1]) * 0.5)}" x2="${f1(b[0] + (b[0] - a[0]) * 0.5)}" y2="${f1(b[1] + (b[1] - a[1]) * 0.5)}" stroke="#fde047" stroke-width="1.8"/>`;
+      const r = Math.round(Math.abs(st.roll));
+      const side = st.roll > 8 ? 'left side down' : st.roll < -8 ? 'right side down' : 'nearly flat';
+      s += tag(v.w / 2, v.h - 26, `body roll ${r}° · ${side}`, '#fde047', fs);
+      if (st.breath.amt > 0.3) s += tag(v.w / 2, v.h - 56, `breathing to the ${st.breath.side > 0 ? 'right' : 'left'}`, '#67e8f9', fs);
+    }
+    if (view === 'top') {
+      for (const sd of [1, -1]) {
+        const y = v.cy - sd * M.BODY.sh * v.s;
+        s += `<line x1="${f1(P([0, 0, 0])[0])}" y1="${f1(y)}" x2="${v.w}" y2="${f1(y)}" stroke="#fde047" stroke-opacity="0.55" stroke-dasharray="8 6" stroke-width="1.5"/>`;
+      }
+      s += `<line x1="${f1(P([40, 0, 0])[0])}" y1="${v.cy}" x2="${v.w}" y2="${v.cy}" stroke="#f87171" stroke-opacity="0.45" stroke-dasharray="2 6" stroke-width="1.5"/>`;
+      s += `<text x="${v.w - 8}" y="${f1(v.cy - M.BODY.sh * v.s - 6)}" font-size="${fs * 0.85}" fill="#fde047" text-anchor="end" opacity="0.85">right "railroad track"</text>`;
+      s += `<text x="${v.w - 8}" y="${f1(v.cy + M.BODY.sh * v.s + 14)}" font-size="${fs * 0.85}" fill="#fde047" text-anchor="end" opacity="0.85">left "railroad track"</text>`;
+      s += `<text x="${v.w - 8}" y="${f1(v.cy - 5)}" font-size="${fs * 0.8}" fill="#fca5a5" text-anchor="end" opacity="0.8">midline — never cross</text>`;
+    }
+    return s;
+  }
+
+  function vectors(view, c) {
+    const { P, pose, st, opts, f1, arrow } = c;
+    let s = '';
+    for (const [arm, t] of [[pose.armR, st.tA], [pose.armL, st.tB]]) {
+      const ph = M.phaseOf(t).id;
+      if (view !== 'front' && (ph === 'catch' || ph === 'pull' || ph === 'push')) {
+        const h = P(arm.W);
+        s += arrow([h[0] + 6, h[1]], [h[0] - 40, h[1]], '#fbbf24', 3.5);
+      }
+      if (view !== 'front' && (ph === 'spear')) {
+        const a = P(arm.W), b = P(arm.H);
+        const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1;
+        s += arrow([b[0] + 4 * dx / L, b[1] + 4 * dy / L], [b[0] + 44 * dx / L, b[1] + 44 * dy / L], '#34d399', 3.5);
+      }
+    }
+    if (view === 'side') {
+      for (const leg of [pose.legR, pose.legL]) if (leg.active) {
+        const f = P(leg.A);
+        s += arrow([f[0], f[1] + 4], [f[0], f[1] + 36], '#f8fafc', 3);
+      }
+      const ph = [M.phaseOf(st.tA).id, M.phaseOf(st.tB).id];
+      if (ph.includes('pull') || ph.includes('push') || ph.includes('spear')) {
+        const h = P(pose.head.c);
+        s += arrow([h[0] + 40, h[1] - 50], [h[0] + 95, h[1] - 50], '#34d399', 3);
+        s += `<text x="${f1(h[0] + 67)}" y="${f1(h[1] - 60)}" font-size="${(opts.fs || 12) * 0.85}" fill="#6ee7b7" text-anchor="middle">body moves forward</text>`;
+      }
+    }
+    if (view === 'front') {
+      const t = st.tA;
+      const rolling = (t > 0.45 && t < 0.58) || t > 0.95 || t < 0.08;
+      if (rolling) {
+        const dir = (t > 0.45 && t < 0.58) ? 1 : -1; // positive roll = right side up
+        const cc = P(pose.torso[3].c);
+        const r = 62;
+        const a0 = dir > 0 ? 200 : -20, a1 = dir > 0 ? 250 : -70;
+        const p0 = [cc[0] + r * Math.cos(a0 * D2R), cc[1] + r * Math.sin(a0 * D2R)];
+        const p1 = [cc[0] + r * Math.cos(a1 * D2R), cc[1] + r * Math.sin(a1 * D2R)];
+        s += `<path d="M${f1(p0[0])},${f1(p0[1])} A${r},${r} 0 0 ${dir > 0 ? 1 : 0} ${f1(p1[0])},${f1(p1[1])}" fill="none" stroke="#a78bfa" stroke-width="3.5"/>`;
+        const tan = dir > 0 ? [-(p1[1] - cc[1]), p1[0] - cc[0]] : [p1[1] - cc[1], -(p1[0] - cc[0])];
+        const L = Math.hypot(tan[0], tan[1]);
+        s += arrow(p1, [p1[0] + tan[0] / L * 2, p1[1] + tan[1] / L * 2], '#a78bfa', 1, 12);
+        s += `<text x="${f1(cc[0])}" y="${f1(cc[1] + r + 18)}" font-size="${(opts.fs || 12) * 0.85}" fill="#c4b5fd" text-anchor="middle">hip-driven rotation</text>`;
+      }
+    }
+    return s;
+  }
+
+  return {
+    swimState: M.swimState,
+    computePose: M.computePose,
+    exhaling: (T, params) => !(M.breathAt(T, params.breath).amt > 0.05),
+    labels, vectors,
   };
 })();

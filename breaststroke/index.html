@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prsa s hlavou nad vodou — vizuální průvodce</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body class="bs">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1730"/><stop offset="1" stop-color="#1b3a63"/></linearGradient>
+    <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="0.5" stop-color="#075985"/><stop offset="1" stop-color="#082f49"/></linearGradient>
+    <linearGradient id="gTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="0.5" stop-color="#0891b2"/><stop offset="1" stop-color="#0e7490"/></linearGradient>
+    <radialGradient id="gBelow" cx="0.6" cy="0.5" r="0.8"><stop offset="0" stop-color="#0e7490"/><stop offset="0.6" stop-color="#0c4a6e"/><stop offset="1" stop-color="#082f49"/></radialGradient>
+  </defs>
+</svg>
+
+<header class="hero">
+  <nav class="topnav">
+    <a href="#lab">Laboratoř</a><a href="#principles">Principy</a><a href="#anatomy">Rozbor záběru</a><a href="#frames">Snímek po snímku</a><a href="#mistakes">Chyby</a><a href="#drills">Cvičení</a><a href="#practice">Trénink</a><a href="#glossary">Slovníček</a><a class="nav-x" href="../">🏊 Total Immersion freestyle (EN)</a>
+  </nav>
+  <div class="hero-inner">
+    <p class="kicker">Vizuální průvodce</p>
+    <h1>Prsa s hlavou nad vodou</h1>
+    <p class="lede">Klidná rekreační prsa pro každého, kdo nechce dávat hlavu pod vodu. <b>Oči a nos zůstávají nad hladinou</b> a pod vodu jdou jen <b>ústa</b>, aby se dalo pohodlně vydechovat. Nejde o závodní techniku. Jde o plavání, které je <b>uvolněné, šetrné ke krku a zádům</b> a dá se vydržet dlouho.</p>
+    <div class="pillars">
+      <div class="pillar"><span>1</span><h3>Dlouhý krk</h3><p>Hlava je nad vodou, ale není zakloněná. Oči se dívají vpřed a mírně dolů, brada je lehce přitažená.</p></div>
+      <div class="pillar"><span>2</span><h3>Rytmus</h3><p>Záběr, nádech, kop, skluz. Paže a nohy se střídají a nikdy nepracují najednou.</p></div>
+      <div class="pillar"><span>3</span><h3>Skluz</h3><p>Po každém kopu se nech dovézt a napočítej „jedna, dva“. Skluz je odpočinek a zadarmo rychlost.</p></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ LAB ============ -->
+<section id="lab" class="section">
+  <div class="sec-head">
+    <h2>Laboratoř záběru</h2>
+    <p>Jeden plavec, tři kamery, vše synchronně. Pusť si pohyb zpomaleně, posouvej časovou osu nebo krokuj klíčové polohy. Pohled <b>zespodu</b> nejlépe ukazuje „srdíčko“ paží a bičový kop. Klávesy: <kbd>Mezerník</kbd> přehrát/pauza · <kbd>←</kbd><kbd>→</kbd> jemný krok (se <kbd>Shift</kbd> větší) · <kbd>[</kbd><kbd>]</kbd> předchozí/další klíčová poloha.</p>
+  </div>
+
+  <div class="lab-grid">
+    <div class="lab-views">
+      <div class="view" data-view="side"><div class="view-label">Z boku (z levé strany plavce)</div><svg></svg></div>
+      <div class="view-row">
+        <div class="view" data-view="front"><div class="view-label">Zepředu</div><svg></svg></div>
+        <div class="view" data-view="below"><div class="view-label">Zespodu (ode dna)</div><svg></svg></div>
+      </div>
+
+      <div class="controls">
+        <div class="ctrl-row">
+          <button class="btn" id="btn-prev" title="Předchozí klíčová poloha ([)">⏮ Poloha</button>
+          <button class="btn" id="btn-back" title="Krok zpět (←)">◀ 1 %</button>
+          <button class="btn primary" id="btn-play">❚❚ Pauza</button>
+          <button class="btn" id="btn-fwd" title="Krok vpřed (→)">1 % ▶</button>
+          <button class="btn" id="btn-next" title="Další klíčová poloha (])">Poloha ⏭</button>
+          <input type="range" id="scrub" min="0" max="999" value="220" aria-label="Pozice v cyklu">
+          <span id="tpos" class="tpos">22%</span>
+        </div>
+        <svg id="timeline" class="timeline"></svg>
+        <div class="ctrl-row wrap">
+          <label>Rychlost
+            <select id="speed">
+              <option value="0.08">0,08× (velmi pomalu)</option>
+              <option value="0.15">0,15×</option>
+              <option value="0.25" selected>0,25×</option>
+              <option value="0.5">0,5×</option>
+              <option value="1">1× (skutečná)</option>
+            </select>
+          </label>
+          <label>Skluz
+            <select data-param="glide">
+              <option value="long" selected>Dlouhý (rekreační)</option>
+              <option value="short">Krátký</option>
+            </select>
+          </label>
+          <label>Kop
+            <select data-param="kick">
+              <option value="whip" selected>Bičový (doporučený)</option>
+              <option value="frog">Žabí (široký)</option>
+            </select>
+          </label>
+          <label>Simulátor chyb
+            <select id="mistake">
+              <option value="none">— Správná technika —</option>
+              <option value="headBack">Záklon hlavy</option>
+              <option value="together">Paže a nohy najednou</option>
+              <option value="widePull">Záběr až za ramena</option>
+              <option value="noGlide">Žádný skluz</option>
+              <option value="kneesUnder">Kolena pod břicho</option>
+              <option value="pointedFeet">Natažené špičky při kopu</option>
+              <option value="screw">Nesouměrný kop</option>
+            </select>
+          </label>
+        </div>
+        <div class="ctrl-row wrap toggles">
+          <label><input type="checkbox" id="opt-labels" checked> Popisky</label>
+          <label><input type="checkbox" id="opt-vectors" checked> Šipky pohybu</label>
+          <label><input type="checkbox" id="opt-ghost"> Duch (správný tvar)</label>
+          <label><input type="checkbox" id="opt-bubbles" checked> Bublinky</label>
+          <span class="sep"></span>
+          <label><input type="checkbox" data-viewtoggle="side" checked> Z boku</label>
+          <label><input type="checkbox" data-viewtoggle="front" checked> Zepředu</label>
+          <label><input type="checkbox" data-viewtoggle="below" checked> Zespodu</label>
+        </div>
+      </div>
+    </div>
+
+    <aside class="info">
+      <div id="info-arms"></div>
+      <div class="info-body" id="info-body"></div>
+      <div id="info-mistake"></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ PRINCIPLES ============ -->
+<section id="principles" class="section">
+  <div class="sec-head">
+    <h2>Principy: proč tahle prsa vypadají takhle</h2>
+    <p>Prsa s hlavou nad vodou jsou úplně legitimní způsob plavání. Mají ale jednu daň: <b>když je hlava nahoře, boky klesnou</b> a tělo jede ve vodě šikmo. Proto tahle technika stojí na třech věcech: <b>šetřit krk</b>, <b>dodržet rytmus</b> a <b>využít skluz</b>.</p>
+  </div>
+  <div class="principles">
+    <div class="card span-all">
+      <div class="split">
+      <div>
+      <h3>① Poloha těla a hlavy</h3>
+      <p>Hlava je těžká. Čím víc ji zvedáš a zakláníš, tím víc klesají boky a nohy a tím víc vody před sebou tlačíš. Cílem není dostat hlavu co nejvýš, ale <b>jen tak vysoko, aby oči a nos byly nad vodou</b>.</p>
+      <ul>
+        <li><b>Dlouhý krk:</b> krční páteř je prodloužením zad, brada je lehce přitažená.</li>
+        <li><b>Ústa smějí do vody.</b> Do vody vydechuješ, takže se nemusíš držet nahoře.</li>
+        <li><b>Paže vpředu</b> ve skluzu fungují jako protiváha a pomáhají zvednout boky.</li>
+      </ul>
+      </div>
+      <div class="fig wide" data-fig="body"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>② Rytmus, ne síla</h3>
+      <p>Prsa jsou souhra dvou motorů, které se <b>střídají</b>: paže (a s nimi nádech), pak nohy, pak skluz. Když pracují najednou, tlačí proti sobě a tělo se zastaví.</p>
+      <ul>
+        <li><b>Záběr:</b> malé srdíčko pažemi, ramena stoupají.</li>
+        <li><b>Nádech</b> přichází sám, když se ramena zvednou.</li>
+        <li><b>Kop</b> až když jsou paže skoro natažené. Pak <b>skluz</b>.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>③ Šetrnost ke krku a zádům</h3>
+      <p>Plavání s hlavou nad vodou je pro mnoho lidí příjemné, ale při záklonu hlavy a prohnutých bedrech může krk a kříž bolet. Pomáhá:</p>
+      <ul>
+        <li>držet <b>dlouhý krk</b> a nedívat se „do nebe“,</li>
+        <li><b>vydechovat do vody</b>, aby hlava nemusela být stále nahoře,</li>
+        <li>plavat <b>kratší úseky</b> a střídat je s plaváním na zádech,</li>
+        <li>když bolest přetrvává, <b>poradit se s fyzioterapeutem</b> nebo trenérem.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ANATOMY ============ -->
+<section id="anatomy" class="section">
+  <div class="sec-head">
+    <h2>Rozbor záběru</h2>
+    <p>Každá část pohybu zvlášť, s animovaným detailem. Každý obrázek můžeš zastavit tlačítkem ❚❚ nebo otevřít daný okamžik v laboratoři.</p>
+  </div>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">01</span><h3>Hlava a krk</h3>
+      <p>Hlava je nad vodou, ale <b>krk je dlouhý</b> a navazuje na páteř. Oči se dívají vpřed a mírně dolů, zhruba na hladinu pár metrů před tebou. <b>Oči a nos</b> zůstávají celou dobu nad vodou. <b>Ústa</b> klesají k hladině nebo kousek pod ni, a proto můžeš vydechovat do vody.</p>
+      <ul class="cues"><li>Brada lehce přitažená, žádný záklon</li><li>Hlava se hýbe s rameny, ne zvlášť</li><li>Ústa ve vodě jsou v pořádku</li></ul>
+      <button class="link" data-goto="0.8">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="head-good"></div><div class="fig" data-fig="head-bad"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">02</span><h3>Poloha těla</h3>
+      <p>S hlavou nad vodou jede tělo <b>mírně šikmo</b>, boky jsou níž než u kraulu. Je to normální. Šikmost ale zvyšuje odpor, a proto potřebuješ <b>úzký profil</b> (paže natažené, nohy u sebe) a <b>skluz</b>. Během záběru se ramena zvednou a během kopu a skluzu tělo zase klesne a narovná se. To je přirozené houpání prsou.</p>
+      <ul class="cues"><li>Ve skluzu dlouhý a úzký</li><li>Mírné houpání je v pořádku</li><li>Boky nahoru: hlava nízko, paže vpřed</li></ul>
+      <button class="link" data-goto="0.8">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="bob-side"></div><div class="fig" data-fig="body-front"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">03</span><h3>Dýchání</h3>
+      <p><b>Nádech</b> přichází přirozeně při záběru dovnitř, když se ramena zvednou. Ústa jsou chvíli nad vodou, nadechni se jimi. Když paže vystřelí vpřed, ústa se vrátí k hladině a ve skluzu <b>vydechuješ ústy do vody</b>. Pravidelný výdech zabraňuje zadýchání i zadržování dechu, a díky němu nemusíš hlavu držet vysoko.</p>
+      <ul class="cues"><li>Nádech při záběru, výdech ve skluzu</li><li>Vydechuj pomalu, souvislými bublinkami</li><li>Nezadržuj dech</li></ul>
+      <button class="link" data-goto="0.22">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="breath-side"></div><div class="fig" data-fig="breath-front"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">04</span><h3>Paže: roztažení</h3>
+      <p>Z natažené polohy se ruce rozjedou <b>ven a mírně dolů</b>, dlaně jsou natočené ven. Stačí <b>kousek za šířku ramen</b>. Široký kruh ti nic nepřidá, jen prodlouží cestu zpátky. Tato fáze je klidná, je to příprava na záběr.</p>
+      <ul class="cues"><li>Jen o něco šířeji než ramena</li><li>Ruce těsně pod hladinou</li><li>Klidně, bez síly</li></ul>
+      <button class="link" data-goto="0.07">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="out-front"></div><div class="fig" data-fig="out-below"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">05</span><h3>Paže: záběr dovnitř („srdíčko“)</h3>
+      <p>To je hlavní práce paží. <b>Lokty zůstávají vysoko</b>, předloktí se sklopí a dlaně s předloktím táhnou vodu <b>dolů a dovnitř pod bradu</b>. Dlaně při tom opíšou tvar malého srdíčka. <b>Ruce nikdy nejedou za ramena.</b> Ramena se při záběru zvednou a ty se nadechneš.</p>
+      <ul class="cues"><li>Vysoké lokty, opřít se předloktím</li><li>Srdíčko pod bradou, ne ke břichu</li><li>Nádech, když se ramena zvednou</li></ul>
+      <button class="link" data-goto="0.2">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="in-front"></div><div class="fig" data-fig="in-side"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">06</span><h3>Paže: vystřelení vpřed</h3>
+      <p>Dlaně se setkají pod bradou a <b>plynule vystřelí vpřed</b> těsně pod hladinou. Hlava a ramena přitom klesnou zpátky a ústa se vrátí k hladině. Zároveň začínají nohy přitahovat paty. Paže zůstanou natažené, dokud nohy nedokončí kop.</p>
+      <ul class="cues"><li>Ruce u sebe, pod hladinou</li><li>Natáhnout se jako šipka</li><li>Paže čekají na kop</li></ul>
+      <button class="link" data-goto="0.37">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="fwd-side"></div><div class="fig" data-fig="fwd-below"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">07</span><h3>Nohy: přitažení pat</h3>
+      <p>Paty se <b>táhnou k hýždím</b>, ne kolena k bradě. Kolena klesají jen tolik, kolik je nutné, a zůstávají <b>zhruba na šířku boků</b>. Kyčle zůstávají co nejvíc otevřené. Přitažení je pomalé a uvolněné, protože každý prudký pohyb nohou dopředu brzdí.</p>
+      <ul class="cues"><li>Paty k zadku</li><li>Kolena na šířku boků, ne pod břicho</li><li>Pomalu, bez síly</li></ul>
+      <button class="link" data-goto="0.36">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="draw-side"></div><div class="fig" data-fig="draw-below"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">08</span><h3>Nohy: kop</h3>
+      <p>Na konci přitažení se chodidla <b>přitáhnou</b> (špičky k holeni) a <b>vytočí ven</b>. Pak tlačí vodu vnitřní stranou chodidel a holení <b>dozadu a obloukem k sobě</b>, jako švihnutí bičem. Kop končí propnutými koleny a nohama u sebe. Doporučený je <b>bičový kop</b> (úzká kolena). <b>Žabí kop</b> s kolenem do stran je pro začátečníky přirozenější, ale víc brzdí a víc namáhá kolena. V laboratoři si oba můžeš přepnout.</p>
+      <ul class="cues"><li>Špičky k holeni a ven</li><li>Paty šířeji než kolena</li><li>Dokončit kop: nohy u sebe</li></ul>
+      <button class="link" data-goto="0.48">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs"><div class="fig" data-fig="kick-below"></div><div class="fig" data-fig="kick-front"></div><div class="fig" data-fig="kick-frog"></div></div>
+  </article>
+
+  <article class="part">
+    <div class="part-txt">
+      <span class="part-n">09</span><h3>Skluz a rytmus</h3>
+      <p>Po kopu je tělo dlouhé a úzké a <b>klouže</b>. Ve skluzu vydechuj do vody a napočítej <b>„jedna, dva“</b>, teprve pak začni další záběr. Celý cyklus si říkej nahlas nebo v duchu: <b>záběr, nádech, kop, skluz</b>. Paže a nohy se střídají a nikdy nepracují najednou.</p>
+      <ul class="cues"><li>Záběr, nádech, kop, skluz</li><li>Ve skluzu „jedna, dva“</li><li>Raději pomaleji a delší skluz</li></ul>
+      <button class="link" data-goto="0.8">Otevřít v laboratoři →</button>
+    </div>
+    <div class="part-figs one"><div class="fig" data-fig="rhythm-side"></div></div>
+  </article>
+</section>
+
+<!-- ============ FRAMES ============ -->
+<section id="frames" class="section">
+  <div class="sec-head">
+    <h2>Snímek po snímku: jeden celý cyklus</h2>
+    <p>Osm klíčových poloh jednoho záběru. Prohlédni si je jako kartičky a pak přepni kameru.</p>
+    <div class="seg">
+      <button class="on" data-filmview="side">Z boku</button><button data-filmview="front">Zepředu</button><button data-filmview="below">Zespodu</button>
+    </div>
+  </div>
+  <div id="film" class="film"></div>
+</section>
+
+<!-- ============ MISTAKES ============ -->
+<section id="mistakes" class="section">
+  <div class="sec-head">
+    <h2>Časté chyby a jak je opravit</h2>
+    <p>Na každé kartičce je vlevo chyba a vpravo správný tvar. Tlačítkem „Simulovat v laboratoři“ si chybu prohlédneš ze všech tří kamer i s „duchem“ správné techniky.</p>
+  </div>
+  <div id="mistakes-grid" class="mistakes-grid"></div>
+</section>
+
+<!-- ============ DRILLS ============ -->
+<section id="drills" class="section">
+  <div class="sec-head">
+    <h2>Cvičení</h2>
+    <p>Nejdřív kop, pak paže, pak rytmus. Každé cvičení dělej, dokud není snadné a uvolněné. Krátké úseky a dostatek odpočinku. Hlavu nemusíš dávat pod vodu ani jednou.</p>
+  </div>
+  <ol id="drills-list" class="drills"></ol>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section id="practice" class="section">
+  <div class="sec-head">
+    <h2>Jak trénovat</h2>
+    <p>Pomalu a s pozorností. Lepší je pár délek s jedním konkrétním cílem než hodina bezmyšlenkovitého plavání.</p>
+  </div>
+  <div class="practice-grid">
+    <div class="card">
+      <h3>🎯 Jeden bod najednou</h3>
+      <p>Vyber si jednu věc, třeba „dlouhý krk“ nebo „ve skluzu jedna, dva“, a plav krátké úseky jen s ní. Když jde sama, přidej další.</p>
+    </div>
+    <div class="card">
+      <h3>🔢 Počítej záběry</h3>
+      <p>Spočítej záběry na jednu délku při klidném tempu. Když jich ubude a úsilí zůstane stejné, plaveš efektivněji, a to hlavně díky kopu a skluzu.</p>
+    </div>
+    <div class="card">
+      <h3>🫁 Výdech do vody</h3>
+      <p>Nauč se nejdřív u okraje: nádech ústy, ústa k hladině a pomalý výdech do vody. Pak to samé při kopu s deskou. Výdech je klíč k tomu, aby plavání nebylo zadýchané.</p>
+    </div>
+    <div class="card">
+      <h3>🩺 Krk a záda</h3>
+      <p>Když tě po plavání bolí krk nebo kříž, zkrať úseky, hlídej záklon hlavy a střídej prsa s plaváním na zádech. Pokud bolest přetrvává, poraď se s fyzioterapeutem. Žabí kop a kolena: pokud bolí kolena, zúž kop a nekopej silou.</p>
+    </div>
+  </div>
+
+  <div class="card checklist-card">
+    <div class="ck-head"><h3>Kontrolní seznam</h3><span id="ck-count"></span><button class="btn small" id="ck-reset">Vymazat</button></div>
+    <p class="muted">Zaškrtni bod, když ho ve vodě cítíš, aniž bys na něj musel/a myslet. Pokrok se ukládá v tomto prohlížeči.</p>
+    <div id="checklist" class="checklist"></div>
+  </div>
+</section>
+
+<!-- ============ GLOSSARY ============ -->
+<section id="glossary" class="section">
+  <div class="sec-head"><h2>Slovníček</h2></div>
+  <dl class="glossary">
+    <div><dt>Prsa s hlavou nad vodou</dt><dd>Rekreační varianta prsou, kde oči a nos zůstávají nad hladinou. Pod vodu jdou jen ústa kvůli výdechu.</dd></div>
+    <div><dt>Skluz</dt><dd>Fáze po kopu, kdy je tělo natažené a klouže. Odpočinek a „rychlost zadarmo“.</dd></div>
+    <div><dt>Roztažení</dt><dd>Úvod záběru paží: ruce se rozjedou kousek za šířku ramen.</dd></div>
+    <div><dt>Záběr dovnitř (srdíčko)</dt><dd>Hlavní práce paží: s vysokými lokty se dlaně a předloktí stáhnou dolů a dovnitř pod bradu.</dd></div>
+    <div><dt>Vysoký loket</dt><dd>Loket zůstává nahoře, zatímco předloktí se sklopí a opře o vodu.</dd></div>
+    <div><dt>Vystřelení paží</dt><dd>Spojené ruce plynule vyjedou vpřed těsně pod hladinou.</dd></div>
+    <div><dt>Přitažení pat</dt><dd>Příprava kopu: paty jdou k hýždím, kolena zůstávají zhruba na šířku boků.</dd></div>
+    <div><dt>Vytočení chodidel</dt><dd>Špičky k holeni a ven („kachní nohy“), aby se chodidla mohla opřít o vodu.</dd></div>
+    <div><dt>Bičový kop</dt><dd>Úzký prsový kop: kolena blízko u sebe, paty šířeji a švihnutí dozadu obloukem.</dd></div>
+    <div><dt>Žabí kop</dt><dd>Široký kop s koleny do stran. Přirozenější pro začátečníky, ale víc brzdí a víc namáhá kolena.</dd></div>
+    <div><dt>Šroubový kop</dt><dd>Nesouměrný kop, kdy jedna noha kope nataženou nebo dovnitř vytočenou špičkou.</dd></div>
+    <div><dt>Pullbuoy</dt><dd>Pěnová pomůcka mezi stehny, která drží nohy nahoře při plavání jen pažemi.</dd></div>
+    <div><dt>Sculling (vesla)</dt><dd>Jemné pohyby dlaní ven a dovnitř pro cit pro vodu.</dd></div>
+  </dl>
+</section>
+</main>
+
+<footer>
+  <p>Studijní pomůcka. Animovaný plavec je zjednodušený model, který ukazuje polohy a načasování. Není to přesná biomechanická simulace. Při bolestech krku, zad nebo kolen se poraď s odborníkem. · <a href="../">Total Immersion freestyle guide (EN)</a></p>
+</footer>
+
+<script src="../js/engine/geom.js"></script>
+<script src="../js/engine/render.js"></script>
+<script src="../js/breaststroke/model.js"></script>
+<script src="../js/breaststroke/content.js"></script>
+<script src="../js/engine/ui.js"></script>
+</body>
+</html>

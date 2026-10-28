@@ -1,15 +1,33 @@
-# Total Immersion Freestyle — A Visual Study Guide
+# Swimming Visual Study Guides
 
-An interactive, animated guide to the Total Immersion (TI) freestyle swimming technique.
+Interactive, animated guides for studying swimming technique part by part. No build step: open the HTML files in a browser.
 
-**Live:** https://vlinhart.github.io/total-immersion-guide/
+| Guide | Language | Live |
+|---|---|---|
+| **Total Immersion Freestyle** | English | https://vlinhart.github.io/total-immersion-guide/ |
+| **Prsa s hlavou nad vodou** (heads-up recreational breaststroke) | Czech | https://vlinhart.github.io/total-immersion-guide/breaststroke/ |
 
-- **Stroke Lab** — one animated swimmer, three synchronized cameras (side, head-on, above), scrubbable timeline, slow motion, key-position stepping, breathing patterns, overlays and a mistake simulator with a correct-form ghost.
-- **Stroke anatomy** — head & spine, rotation, skate, recovery, entry & spear, front-quadrant timing, catch, pull/push, 2-beat kick, breathing.
+Each guide includes:
+
+- **Stroke Lab:** one animated swimmer and three synchronized cameras, a timeline you can drag through, slow motion, stepping through key positions, overlays, and a mistake simulator with a correct-form "ghost" for comparison.
+- **Stroke anatomy:** animated close-ups of each part of the stroke.
 - **Frame by frame**, **common mistakes**, **drill progression**, **practice tips** and a **focal-point checklist**.
 
-No build step — just open `index.html` in a browser.
+Stroke Lab keys: `Space` play/pause · `←` `→` step (hold `Shift` for bigger steps) · `[` `]` previous/next key position.
 
-Keyboard in the Stroke Lab: `Space` play/pause · `←` `→` step (hold `Shift` for bigger steps) · `[` `]` previous/next key position.
+## Code layout
 
-The animated swimmer is a simplified kinematic model meant to illustrate positions and timing, not a precise biomechanical simulation. Inspired by the Total Immersion method created by Terry Laughlin.
+```
+index.html                  freestyle page
+breaststroke/index.html     breaststroke page (Czech)
+style.css                   shared styles
+js/engine/geom.js           math, 3D helpers, IK, keyframe sampling
+js/engine/render.js         shared SVG renderer (side, front, top, below cameras)
+js/engine/ui.js             shared page UI (lab, timeline, figures, mistakes, drills, checklist)
+js/freestyle/model.js       freestyle movement model + overlays
+js/freestyle/content.js     freestyle texts and figure setup
+js/breaststroke/model.js    breaststroke movement model + overlays
+js/breaststroke/content.js  breaststroke texts and figure setup
+```
+
+The animated swimmers are simplified kinematic models for showing positions and timing, not precise biomechanical simulations. The freestyle guide is inspired by the Total Immersion method created by Terry Laughlin.

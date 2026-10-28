@@ -12,12 +12,13 @@
     <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1730"/><stop offset="1" stop-color="#1b3a63"/></linearGradient>
     <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="0.5" stop-color="#075985"/><stop offset="1" stop-color="#082f49"/></linearGradient>
     <linearGradient id="gTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="0.5" stop-color="#0891b2"/><stop offset="1" stop-color="#0e7490"/></linearGradient>
+    <radialGradient id="gBelow" cx="0.6" cy="0.5" r="0.8"><stop offset="0" stop-color="#7dd3fc"/><stop offset="0.6" stop-color="#0ea5e9"/><stop offset="1" stop-color="#075985"/></radialGradient>
   </defs>
 </svg>
 
 <header class="hero">
   <nav class="topnav">
-    <a href="#lab">Stroke Lab</a><a href="#principles">Principles</a><a href="#anatomy">Stroke Anatomy</a><a href="#frames">Frame by Frame</a><a href="#mistakes">Mistakes</a><a href="#drills">Drills</a><a href="#practice">Practice</a><a href="#glossary">Glossary</a>
+    <a href="#lab">Stroke Lab</a><a href="#principles">Principles</a><a href="#anatomy">Stroke Anatomy</a><a href="#frames">Frame by Frame</a><a href="#mistakes">Mistakes</a><a href="#drills">Drills</a><a href="#practice">Practice</a><a href="#glossary">Glossary</a><a class="nav-x" href="breaststroke/">🐸 Prsa s hlavou nad vodou (CZ)</a>
   </nav>
   <div class="hero-inner">
     <p class="kicker">A visual study guide</p>
@@ -41,10 +42,10 @@
 
   <div class="lab-grid">
     <div class="lab-views">
-      <div class="view" id="lab-side"><div class="view-label">Side view (from the swimmer’s left)</div><svg></svg></div>
+      <div class="view" id="lab-side" data-view="side"><div class="view-label">Side view (from the swimmer’s left)</div><svg></svg></div>
       <div class="view-row">
-        <div class="view" id="lab-front"><div class="view-label">Head-on view</div><svg></svg></div>
-        <div class="view" id="lab-top"><div class="view-label">From above</div><svg></svg></div>
+        <div class="view" id="lab-front" data-view="front"><div class="view-label">Head-on view</div><svg></svg></div>
+        <div class="view" id="lab-top" data-view="top"><div class="view-label">From above</div><svg></svg></div>
       </div>
 
       <div class="controls">
@@ -69,7 +70,7 @@
             </select>
           </label>
           <label>Breathing
-            <select id="breath">
+            <select id="breath" data-param="breath">
               <option value="0">None</option>
               <option value="2" selected>Every 2 strokes (right)</option>
               <option value="3">Every 3 strokes (bilateral)</option>
@@ -94,9 +95,9 @@
           <label><input type="checkbox" id="opt-ghost"> Ghost (correct form)</label>
           <label><input type="checkbox" id="opt-bubbles" checked> Bubbles</label>
           <span class="sep"></span>
-          <label><input type="checkbox" id="view-side" checked> Side</label>
-          <label><input type="checkbox" id="view-front" checked> Head-on</label>
-          <label><input type="checkbox" id="view-top" checked> Above</label>
+          <label><input type="checkbox" id="view-side" data-viewtoggle="side" checked> Side</label>
+          <label><input type="checkbox" id="view-front" data-viewtoggle="front" checked> Head-on</label>
+          <label><input type="checkbox" id="view-top" data-viewtoggle="top" checked> Above</label>
         </div>
       </div>
     </div>
@@ -347,8 +348,10 @@
   <p>Study aid inspired by the Total Immersion method created by Terry Laughlin. The animated swimmer is a simplified model meant to show positions and timing. It is not a precise biomechanical simulation. Learn from a TI coach or official TI materials for in-water feedback.</p>
 </footer>
 
-<script src="js/model.js"></script>
-<script src="js/render.js"></script>
-<script src="js/app.js"></script>
+<script src="js/engine/geom.js"></script>
+<script src="js/engine/render.js"></script>
+<script src="js/freestyle/model.js"></script>
+<script src="js/freestyle/content.js"></script>
+<script src="js/engine/ui.js"></script>
 </body>
 </html>
